@@ -2,7 +2,7 @@ package calculus;
 
 public class Application implements Expression {
     public final Expression function; // The function getting applied
-    public Expression argument; // What is getting passed as an argument
+    public final Expression argument; // What is getting passed as an argument
 
     public Application(Expression function, Expression argument){
         this.function = function;
