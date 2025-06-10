@@ -16,12 +16,25 @@ public class Application implements Expression {
 
     @Override
     public Expression betaReduce() {
-        if (function instanceof Lambda lambda) {
+        // This might make it faster but for debugging its disabled right now
+        /*if (function instanceof Lambda lambda) {
             return lambda.getBody().replLiteral(lambda.getLiteral(), argument);
+        }*/
+
+        Expression reducedFunction = function.betaReduce();
+        Expression reducedArgument = argument.betaReduce();
+        if (reducedFunction instanceof Lambda lambda) {
+            // Now that it's a lambda, apply it
+            return lambda.getBody().replLiteral(
+                lambda.getLiteral(),
+                reducedArgument
+            );
         } else {
-            return new Application(function.betaReduce(), argument.betaReduce());
+            // Only reduce function if it's not a lambda
+            return new Application(reducedFunction, reducedArgument);   
         }
-    }
+    }   
+
 
     @Override
     public Expression replLiteral(Literal toReplace, Expression toReplaceWith) {
@@ -63,5 +76,22 @@ public class Application implements Expression {
     public String toString(){
         return "(" + function.toString() + argument.toString() + ")";
     }
+    
+    @Override
+    public boolean equalsAlpha(Expression other) {
+        if (!(other instanceof Application app)) return false;
+        return this.function.equalsAlpha(app.function) && this.argument.equalsAlpha(app.argument);
+    }
+
+    @Override
+    public String prettyPrint(String prefix, boolean isTail) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(prefix).append(isTail ? "└── " : "├── ").append("Application").append("\n");
+        sb.append(function.prettyPrint(prefix + (isTail ? "    " : "│   "), false));
+        sb.append(argument.prettyPrint(prefix + (isTail ? "    " : "│   "), true));
+        return sb.toString();
+    }
+
+
     
 }

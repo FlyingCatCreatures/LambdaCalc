@@ -24,6 +24,12 @@ public class Integer {
         return app(PREDexpr, num);
     }
 
+    // Subtraction: SUB = λn.λm. m PRED n
+    public final static Expression SUBexpr = lam(lit('n'), lam(lit('m'), app(app(lit('m'), PREDexpr), lit('n'))));
+    public static Expression SUB(Expression n, Expression m) {
+        return app(app(SUBexpr, n), m);
+    }
+
     public static Expression INT(int num) {
         if (num == 0) {
             Literal f = lit('f');

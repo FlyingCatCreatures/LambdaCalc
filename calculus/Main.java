@@ -1,7 +1,10 @@
 package calculus;
 
+import static calculus.ExpressionBuilder.*;
 import static calculus.bool.BooleanLogic.*;
 import static calculus.numeric.Integer.*;
+
+import calculus.calculator.Calculator;
 
 import static calculus.numeric.Ackermann.*;
 import calculus.numeric.IntegerUtil;
@@ -45,9 +48,9 @@ public class Main {
 	}
 
 	static void mainInt(){
-		Expression expr = MUL(INT(10),INT(10));
-        System.out.println("Evaluating A(2,1)");
-		var result = expr.normalize(-1);
+		Expression expr = MUL(ADDexpr,ADDexpr);
+        System.out.println("Evaluating...");
+		var result = expr.normalize(100);
 
 		System.out.println("Evaluation path: ");
 		System.out.println(result.debugSteps);
@@ -60,13 +63,14 @@ public class Main {
 		if (number >= 0) {
 			System.out.println("So the result is the number " + number);
 		} else {
-			System.out.println("Could not decode result as a number");
+			System.out.println("Could not decode result as a number. Here's a prettyprint");
+			//System.out.println(resexpr.prettyPrint());
 		}
 	}
 
 	static void mainGeneral(){
 		Expression expr = ADD(INT(5), INT(2));
-        System.out.println("Evaluating +*+");
+        System.out.println("Evaluating 5+2s");
 		var result = expr.normalize(-1);
 
 		System.out.println("Evaluation path: ");
@@ -79,7 +83,8 @@ public class Main {
     
 	public static void main(String[] args) {
 		//mainbool();
-		mainInt();
+		//mainInt();
 		//mainGeneral();
+		Calculator.start();
     }
 }

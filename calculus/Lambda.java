@@ -61,4 +61,26 @@ public class Lambda implements Expression{
         return 31 * param.hashCode() + func.hashCode();
     }
 
+    @Override
+    public boolean equalsAlpha(Expression other) {
+        if (!(other instanceof Lambda lambda)) return false;
+
+        // Rename both to the same fresh variable and compare bodies
+        Literal fresh = Literal.freshLiteral();
+        Expression renamedThis = this.func.replLiteral(this.param, fresh);
+        Expression renamedOther = lambda.func.replLiteral(lambda.param, fresh);
+        return renamedThis.equalsAlpha(renamedOther);
+    }
+
+    @Override
+    public String prettyPrint(String prefix, boolean isTail) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(prefix).append(isTail ? "└── " : "├── ").append("Lambda ").append(param).append("\n");
+        sb.append(func.prettyPrint(prefix + (isTail ? "    " : "│   "), true));
+        return sb.toString();
+    }
+
+
+
+
 }

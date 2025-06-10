@@ -46,4 +46,17 @@ public class Literal implements Expression {
     public String toString(){
         return String.valueOf(c);
     }
+
+    @Override
+    public boolean equalsAlpha(Expression other) {
+        if (!(other instanceof Literal lit)) return false;
+        return this.equals(lit);
+    }
+
+    @Override
+    public String prettyPrint(String prefix, boolean isTail) {
+        return prefix + (isTail ? "└── " : "├── ") + "Literal " + c + "\n";
+    }
+
+
 }
